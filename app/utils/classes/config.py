@@ -28,7 +28,6 @@ class Config:
     database: DatabaseInfo
     configuration: ConfInfo
 
-
     def __init__(self, path: Optional[str] = None):
         try:
             load_dotenv(path)
@@ -39,7 +38,6 @@ class Config:
             logging.error(E)
             self.create_example_env()
             raise E
-    
 
     @staticmethod
     def create_example_env():
