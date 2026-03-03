@@ -1,0 +1,17 @@
+[project]
+name = "fastapi-template"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "bcrypt>=5.0.0",
+  "betterlogging>=1.0.0",
+  "fastapi[standard]>=0.135.1",
+  "itsdangerous>=2.2.0",
+  "python-dotenv>=1.2.2",
+  "tortoise-orm[asyncpg]>=1.1.5",
+  "uvloop>=0.22.1",
+]
+[tool.tortoise]
+tortoise_orm = "app.database.TORTOISE_ORM"

@@ -17,8 +17,7 @@ logging.txt
 *.db-shm
 *.db-wal
 **/migrations/
-pyproject.toml
-.vscode
+
 ### DBeaver ###
 # ide config file
 .dbeaver-data-sources*.xml
@@ -364,6 +363,13 @@ pip-selfcheck.json
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
 
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
 
 # Local History for Visual Studio Code
 .history/
@@ -412,3 +418,4 @@ $RECYCLE.BIN/
 */.ruff
 */ruff
 */ruff_cache
+.python-version

@@ -13,8 +13,11 @@ TORTOISE_ORM = {
     "connections": {"default": f"postgres://{user}:{password}@{host}:{port}/{dbname}"},
     "apps": {
         "models": {
-            "models": ["app.database.models", "aerich.models"],
+            "models": [
+                "app.database.models",
+            ],
             "default_connection": "default",
+            "migrations": "models.migrations",
         },
     },
     "use_tz": True,

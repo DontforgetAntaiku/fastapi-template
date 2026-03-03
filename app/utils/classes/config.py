@@ -3,9 +3,8 @@ from typing import Optional
 
 from dotenv import load_dotenv
 
-from .config_factory import ConfigFactory
-
 from ..exceptions import EnvironmentFileError
+from .config_factory import ConfigFactory
 
 
 class DatabaseInfo(ConfigFactory):
