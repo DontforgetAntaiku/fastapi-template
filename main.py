@@ -2,13 +2,12 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 import betterlogging as bl
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse
-from fastapi.staticfiles import StaticFiles
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from tortoise.contrib.fastapi import RegisterTortoise
 
-from app.core import CONFIG, LOG_LEVEL, TEMPLATES
+from app.core import CONFIG, LOG_LEVEL
 from app.database import TORTOISE_ORM
 from app.routers import routers
 
@@ -28,7 +27,6 @@ def main():
         # docs_url=None,
         redoc_url=None,
     )
-    app.mount("/static", StaticFiles(directory="static"), name="static")
     app.add_middleware(
         SessionMiddleware,
         secret_key=CONFIG.configuration.SESSION_SECRET,
@@ -36,8 +34,15 @@ def main():
         max_age=3600,
         same_site="lax",
     )
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=CONFIG.configuration.ORIGINGS,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     for router in routers:
-        app.include_router(router=router)
+        app.include_router(router=router, prefix="/api")
 
     return app
 
@@ -45,19 +50,7 @@ def main():
 app = main()
 
 
-@app.exception_handler(Exception)
-async def http_exception_handler(request: Request, exc: Exception):
-    if request.headers.get("hx-request"):
-        return JSONResponse(status_code=500, content={"detail": str(exc)})
+if __name__ == "__main__":
+    import uvicorn
 
-    return TEMPLATES.TemplateResponse(
-        "generic_error.html",
-        {
-            "request": request,
-            "status_code": 500,
-            "error_title": "Произошла ошибка",
-            "error_message": "При обработке вашего запроса произошла непредвиденная ошибка.",
-            "detail": str(exc),
-        },
-        status_code=500,
-    )
+    uvicorn.run(app=app, host="0.0.0.0")

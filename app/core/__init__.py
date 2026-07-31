@@ -2,7 +2,7 @@ import logging
 import os
 from typing import Final
 
-from fastapi.templating import Jinja2Templates
+from redis.asyncio import Redis
 
 from app.utils.classes.config import Config
 
@@ -14,4 +14,9 @@ WORK_DIR: Final[str] = os.path.dirname(__file__)
 
 CONFIG: Final = Config(".env")
 
-TEMPLATES = Jinja2Templates(directory="templates")
+REDIS: Redis = Redis(
+    host=CONFIG.redis.HOST,
+    port=CONFIG.redis.PORT,
+    db=CONFIG.redis.DB or 0,
+    password=CONFIG.redis.PASSWORD,
+)

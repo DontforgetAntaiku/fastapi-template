@@ -16,16 +16,28 @@ class DatabaseInfo(ConfigFactory):
     NAME: str
 
 
+class RedisInfo(ConfigFactory):
+    __prefix__ = "REDIS_"
+    HOST: str
+    PORT: int
+    PASSWORD: Optional[str]
+    DB: Optional[int] = 0
+
+
 class ConfInfo(ConfigFactory):
     __prefix__ = "CONF_"
     SESSION_SECRET: str
     LOGIN_SECRET: str
-    ADMIN_DEFAULT_PASSWORD: str
+    ORIGINGS: list[str] = [
+        "http://localhost:8000",
+        "http://localhost",
+    ]
 
 
 class Config:
     database: DatabaseInfo
     configuration: ConfInfo
+    redis: RedisInfo
 
     def __init__(self, path: Optional[str] = None):
         try:
