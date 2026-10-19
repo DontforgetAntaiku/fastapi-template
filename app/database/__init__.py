@@ -17,7 +17,7 @@ TORTOISE_ORM = {
                 "app.database.models",
             ],
             "default_connection": "default",
-            "migrations": "models.migrations",
+            "migrations": "app.models.migrations",
         },
     },
     "use_tz": True,
