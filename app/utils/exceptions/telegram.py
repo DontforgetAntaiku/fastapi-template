@@ -1,0 +1,2 @@
+class TelegramAuthError(Exception):
+    pass

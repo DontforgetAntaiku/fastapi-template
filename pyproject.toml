@@ -1,17 +1,15 @@
 [project]
 name = "fastapi-template"
 version = "0.1.0"
-description = "Add your description here"
+description = "FastAPI + Tortoise ORM + Redis backend template"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.14"
 dependencies = [
-  "bcrypt>=5.0.0",
+  "argon2-cffi>=25.1.0",
   "betterlogging>=1.0.0",
   "fastapi>=0.141.1",
   "itsdangerous>=2.2.0",
-  "pytest>=9.1.1",
-  "pytest-asyncio>=1.4.0",
-  "pytest-cov>=7.1.0",
+  "pydantic-settings>=2.16.2",
   "python-dotenv>=1.2.2",
   "python-multipart>=0.0.32",
   "redis>=8.1.0",
@@ -20,8 +18,50 @@ dependencies = [
   "uvloop>=0.22.1",
 ]
 
+[dependency-groups]
+dev = [
+  "aiosqlite>=0.22.1",
+  "fakeredis>=2.40.0",
+  "httpx>=0.28.1",
+  "pyright>=1.1.400",
+  "pytest>=9.1.1",
+  "pytest-asyncio>=1.4.0",
+  "pytest-cov>=7.1.0",
+  "ruff>=0.9.0",
+]
+
 [tool.tortoise]
 tortoise_orm = "app.database.TORTOISE_ORM"
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+extend-exclude = ["app/database/migrations"]
+
+[tool.ruff.lint]
+select = [
+  "E",
+  "F",
+  "I",
+  "B",
+  "UP",
+  "ASYNC",
+  "S",
+  "SIM",
+  "RUF",
+]
+ignore = ["S104"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106"]
+
+[tool.pyright]
+reportInvalidTypeForm = "none"
+include = ["app", "main.py", "tests"]
+exclude = ["app/database/migrations"]
+pythonVersion = "3.14"
+typeCheckingMode = "standard"

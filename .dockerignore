@@ -1,0 +1,14 @@
+.git
+.venv
+.env
+.env.*
+!.env.example
+**/__pycache__
+.pytest_cache
+.ruff_cache
+.pyright
+tests
+README.md
+Dockerfile
+.dockerignore
+.pre-commit-config.yaml

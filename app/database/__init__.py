@@ -1,28 +1,35 @@
-from app.core import CONFIG
+from typing import Any
 
-user, password, host, port, dbname = (
-    CONFIG.database.USER,
-    CONFIG.database.PASSWORD,
-    CONFIG.database.HOST,
-    CONFIG.database.PORT,
-    CONFIG.database.NAME,
-)
+from app.core import Settings, get_settings
 
 
-TORTOISE_ORM = {
-    "connections": {"default": f"postgres://{user}:{password}@{host}:{port}/{dbname}"},
-    "apps": {
-        "models": {
-            "models": [
-                "app.database.models",
-            ],
-            "default_connection": "default",
-            "migrations": "app.models.migrations",
+def build_tortoise_config(settings: Settings) -> dict[str, Any]:
+    password = settings.database.PASSWORD
+    return {
+        "connections": {
+            "default": {
+                "engine": "tortoise.backends.asyncpg",
+                "credentials": {
+                    "host": settings.database.HOST,
+                    "port": settings.database.PORT,
+                    "user": settings.database.USER,
+                    "password": password.get_secret_value() if password else None,
+                    "database": settings.database.NAME,
+                },
+            },
         },
-    },
-    "use_tz": True,
-    "_create_db": True,
-}
+        "apps": {
+            "models": {
+                "models": ["app.database.models"],
+                "default_connection": "default",
+                "migrations": "app.database.migrations",
+            },
+        },
+        "use_tz": True,
+        "_create_db": settings.app.DEBUG,
+    }
 
 
-__all__ = ("TORTOISE_ORM",)
+TORTOISE_ORM = build_tortoise_config(get_settings())
+
+__all__ = ("TORTOISE_ORM", "build_tortoise_config")
